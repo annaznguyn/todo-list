@@ -3,15 +3,46 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <title>Sign Up</title>
     </head>
 
     <body>
         <h3>Sign Up</h3>
         <p>Username</p>
-        <input>
+        <input id="username">
         <p>Password</p>
-        <input>
+        <input id="password" type="password">
+        <button onclick="signup()">Sign Up</button>
         <p>Have An Account? <a href="{{ url_for('index') }}">Log In</a></p>
+
+        <script>
+            // check if the URL is valid
+            function isValid(url) {
+                if (url.length == 0) {
+                    return false;
+                }
+                if (url[0] == "/") {
+                    return true;
+                }
+                return false;
+            }
+
+            async function signup() {
+                var signupURL = "{{ url_for('handle_signup') }}";
+                var response = await axios.post(signupURL, {
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value
+                });
+
+                // check if the URL returned from the handle_signup function is a valid URL
+                if (!isValid(response.data)) {
+                    console.log(response.data);
+                    return;
+                }
+                // redirect to the page using the URL
+                window.open(response.data, "_self");
+            }
+        </script>
     </body>
 </html>

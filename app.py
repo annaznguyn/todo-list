@@ -24,6 +24,17 @@ def handle_login():
 
     return url_for("home")
 
+@app.route('/signup/user', methods=['POST'])
+def handle_signup():
+    if not request.is_json:
+        abort(404)
+
+    username = request.json.get("username")
+    password = request.json.get("password")
+    print(username, password)
+
+    return url_for("home")
+
 @app.route('/home')
 def home():
     return render_template("home.html")
