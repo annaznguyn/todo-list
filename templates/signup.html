@@ -7,7 +7,7 @@
         <title>Sign Up</title>
 
         <style>
-            #err-msg {
+            #pwd-err, #username-err, #err {
                 color: red;
             }
         </style>
@@ -19,7 +19,9 @@
         <input id="username">
         <p>Password</p>
         <input id="password" type="password"><br>
-        <p id="err-msg" style="display: none;">Username already exists</p>
+        <p id="pwd-err" style="display: none;">Password doesn't match</p>
+        <p id="username-err" style="display: none;">Username doesn't exist</p>
+        <p id="err" style="display: none;">Error logging in</p>
         <button onclick="signup()">Sign Up</button>
         <p>Have An Account? <a href="{{ url_for('index') }}">Log In</a></p>
 
@@ -42,16 +44,27 @@
                     password: document.getElementById("password").value
                 });
 
-                // check if the URL returned from the handle_signup function is a valid URL
-                if (response.data == "Username already exists") {
-                    document.getElementById("err-msg").style.display = "block";
-                    return;
-                } else if (!isValid(response.data)) {
-                    console.log(response.data);
+                // check if the URL returned from the handle_login function in the backend is valid URL
+                if (isValid(response.data)) {
+                    // if the URL is valid, redirect to that page in the current tab
+                    window.open(response.data, "_self");
+                } else {
+                    if (response.data === "Password doesn't match") {
+                        document.getElementById("pwd-err").style.display = "block";
+                        document.getElementById("username-err").style.display = "none";
+                        document.getElementById("err").style.display = "none";
+                    } else if (response.data === "Username doesn't exist") {
+                        document.getElementById("username-err").style.display = "block";
+                        document.getElementById("pwd-err").style.display = "none";
+                        document.getElementById("err").style.display = "none";
+                    } else {
+                        document.getElementById("err").style.display = "block";
+                        document.getElementById("username-err").style.display = "none";
+                        document.getElementById("pwd-err").style.display = "none";
+                        console.log(response.data);
+                    }
                     return;
                 }
-                // redirect to the page using the URL
-                window.open(response.data, "_self");
             }
         </script>
     </body>

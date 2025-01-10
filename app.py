@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, abort
 from flask_socketio import SocketIO
 import pickle
 import json
+import bcrypt
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -26,8 +27,12 @@ def handle_login():
     with open("data.json", "r") as f:
         data = json.load(f)
         if username in data:
-            stored_pwd = data[username]["password"]
-            if stored_pwd == password:
+            # hash the input password and compare it with the hash value stored in the json file
+            salt = data[username]["salt"].encode('utf-8')
+            hash = bcrypt.hashpw(password.encode('utf-8'), salt)
+            
+            stored_hash = data[username]["password"].encode('utf-8')
+            if hash == stored_hash:
                 return url_for("home")
             else:
                 return "Password doesn't match"
@@ -44,19 +49,24 @@ def handle_signup():
     username = request.json.get("username")
     password = request.json.get("password")
 
-    with open("data.json", "r") as f:
-        data = json.load(f)
+    try:
+        with open("data.json", "r") as f:
+            data = json.load(f)
 
-        if username in data:
-            return "Username already exists"
-    
-    # TODO: hash pwd
-    with open("data.json", "w") as f:
-        data[username] = {
-            "password": password
-        }
+            if username in data:
+                return "Username already exists"
+        
+        with open("data.json", "w") as f:
+            salt = bcrypt.gensalt()
+            hash = bcrypt.hashpw(password.encode('utf-8'), salt)
+            data[username] = {
+                "password": hash.decode('utf-8'),
+                "salt": salt.decode('utf-8')
+            }
 
-        json.dump(data, f, indent=4)
+            json.dump(data, f, indent=4)
+    except FileNotFoundError:
+        return "json file not found"
 
     return url_for("home")
 
