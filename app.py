@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, url_for, abort
 from flask_socketio import SocketIO
+import pickle
+import json
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -20,9 +22,19 @@ def handle_login():
 
     username = request.json.get("username")
     password = request.json.get("password")
-    print(username, password)
 
-    return url_for("home")
+    with open("data.json", "r") as f:
+        data = json.load(f)
+        if username in data:
+            stored_pwd = data[username]["password"]
+            if stored_pwd == password:
+                return url_for("home")
+            else:
+                return "Password doesn't match"
+        else:
+            return "Username doesn't exist"
+
+    return "Unexpected error"
 
 @app.route('/signup/user', methods=['POST'])
 def handle_signup():
@@ -31,7 +43,20 @@ def handle_signup():
 
     username = request.json.get("username")
     password = request.json.get("password")
-    print(username, password)
+
+    with open("data.json", "r") as f:
+        data = json.load(f)
+
+        if username in data:
+            return "Username already exists"
+    
+    # TODO: hash pwd
+    with open("data.json", "w") as f:
+        data[username] = {
+            "password": password
+        }
+
+        json.dump(data, f, indent=4)
 
     return url_for("home")
 

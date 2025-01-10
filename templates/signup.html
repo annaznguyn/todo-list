@@ -5,6 +5,12 @@
         <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <title>Sign Up</title>
+
+        <style>
+            #err-msg {
+                color: red;
+            }
+        </style>
     </head>
 
     <body>
@@ -12,7 +18,8 @@
         <p>Username</p>
         <input id="username">
         <p>Password</p>
-        <input id="password" type="password">
+        <input id="password" type="password"><br>
+        <p id="err-msg" style="display: none;">Username already exists</p>
         <button onclick="signup()">Sign Up</button>
         <p>Have An Account? <a href="{{ url_for('index') }}">Log In</a></p>
 
@@ -36,7 +43,10 @@
                 });
 
                 // check if the URL returned from the handle_signup function is a valid URL
-                if (!isValid(response.data)) {
+                if (response.data == "Username already exists") {
+                    document.getElementById("err-msg").style.display = "block";
+                    return;
+                } else if (!isValid(response.data)) {
                     console.log(response.data);
                     return;
                 }

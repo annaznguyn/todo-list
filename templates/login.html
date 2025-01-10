@@ -5,6 +5,12 @@
         <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <title>Log In</title>
+
+        <style>
+            #pwd-err, #username-err, #err {
+                color: red;
+            }
+        </style>
     </head>
 
     <body>
@@ -12,7 +18,10 @@
         <p>Username</p>
         <input id="username">
         <p>Password</p>
-        <input id="password" type="password">
+        <input id="password" type="password"><br>
+        <p id="pwd-err" style="display: none;">Password doesn't match</p>
+        <p id="username-err" style="display: none;">Username doesn't exist</p>
+        <p id="err" style="display: none;">Unexpected error</p>
         <button onclick="login()">Log In</button>
         <p>No Account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
     
@@ -36,13 +45,26 @@
                 });
                 
                 // check if the URL returned from the handle_login function in the backend is valid URL
-                if (!isValid(response.data)) {
-                    console.log(response.data);
+                if (isValid(response.data)) {
+                    // if the URL is valid, redirect to that page in the current tab
+                    window.open(response.data, "_self");
+                } else {
+                    if (response.data === "Password doesn't match") {
+                        document.getElementById("pwd-err").style.display = "block";
+                        document.getElementById("username-err").style.display = "none";
+                        document.getElementById("err").style.display = "none";
+                    } else if (response.data === "Username doesn't exist") {
+                        document.getElementById("username-err").style.display = "block";
+                        document.getElementById("pwd-err").style.display = "none";
+                        document.getElementById("err").style.display = "none";
+                    } else {
+                        document.getElementById("err").style.display = "block";
+                        document.getElementById("username-err").style.display = "none";
+                        document.getElementById("pwd-err").style.display = "none";
+                        console.log(response.data);
+                    }
                     return;
                 }
-
-                // if the URL is valid, redirect to that page in the current tab
-                window.open(response.data, "_self");
             }
         </script>
     
