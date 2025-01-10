@@ -2,11 +2,70 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <title>To-do</title>
         <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
-        <title>Matchy</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <style>
+            .todo-item {
+                width: 195px;
+            }
+
+            .todo-item input {
+                border: 1px solid transparent;
+                border-bottom: 1px solid black;
+                margin-bottom: 10px;
+                outline: none;
+            }
+
+            .todo-item button {
+                border: none;
+                background: none;
+                float: right;
+                border: 1px solid transparent;
+                border-radius: 10px;
+                background: rgba(196, 196, 196, 0.767);
+                width: 50px;
+                height: 25px;
+            }
+
+            .todo-item button:hover {
+                background: black;
+                color: white;
+            }
+
+            .todo-item input:focus {
+                border: 1px solid transparent;
+                border-bottom: 2px solid black;
+            }
+
+            #plus-icon {
+                cursor: pointer;
+            }
+        </style>
     </head>
 
     <body>
-        <p>Home page</p>
+        <div class="todo-item">
+            <div class="todo-input">
+                <i id="plus-icon" class="fa fa-plus"></i>
+                <input id="input-space" placeholder="Add a to-do item"><br>
+            </div>
+            <button id="add-button" style="display: none;">Add</button>
+        </div>
+
+        <script>
+            document.getElementById("plus-icon").addEventListener("click", function() {
+                document.getElementById("input-space").focus();
+            });
+
+            document.getElementById("input-space").addEventListener("focus", function() {
+                document.getElementById("add-button").style.display = "block";
+            });
+
+            document.getElementById("input-space").addEventListener("blur", function() {
+                document.getElementById("add-button").style.display = "none";
+            });
+        </script>
     </body>
 </html>

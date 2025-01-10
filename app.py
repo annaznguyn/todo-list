@@ -24,20 +24,23 @@ def handle_login():
     username = request.json.get("username")
     password = request.json.get("password")
 
-    with open("data.json", "r") as f:
-        data = json.load(f)
-        if username in data:
-            # hash the input password and compare it with the hash value stored in the json file
-            salt = data[username]["salt"].encode('utf-8')
-            hash = bcrypt.hashpw(password.encode('utf-8'), salt)
-            
-            stored_hash = data[username]["password"].encode('utf-8')
-            if hash == stored_hash:
-                return url_for("home")
+    try:
+        with open("data.json", "r") as f:
+            data = json.load(f)
+            if username in data:
+                # hash the input password and compare it with the hash value stored in the json file
+                salt = data[username]["salt"].encode('utf-8')
+                hash = bcrypt.hashpw(password.encode('utf-8'), salt)
+                
+                stored_hash = data[username]["password"].encode('utf-8')
+                if hash == stored_hash:
+                    return url_for("home")
+                else:
+                    return "Password doesn't match"
             else:
-                return "Password doesn't match"
-        else:
-            return "Username doesn't exist"
+                return "Username doesn't exist"
+    except FileNotFoundError:
+        return "json file not found"
 
     return "Unexpected error"
 
