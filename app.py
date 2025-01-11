@@ -73,6 +73,15 @@ def handle_signup():
 
     return url_for("home")
 
+@app.route('/home/add-item', methods=['POST'])
+def add_item():
+    if not request.is_json:
+        abort(404)
+
+    todo_item = request.json.get("content")
+    print(todo_item)
+    return url_for("home")
+
 @app.route('/home')
 def home():
     return render_template("home.html")
