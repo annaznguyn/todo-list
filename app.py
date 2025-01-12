@@ -34,7 +34,7 @@ def handle_login():
                 
                 stored_hash = data[username]["password"].encode('utf-8')
                 if hash == stored_hash:
-                    return url_for("home")
+                    return url_for("home", username=username)
                 else:
                     return "Password doesn't match"
             else:
@@ -64,27 +64,47 @@ def handle_signup():
             hash = bcrypt.hashpw(password.encode('utf-8'), salt)
             data[username] = {
                 "password": hash.decode('utf-8'),
-                "salt": salt.decode('utf-8')
+                "salt": salt.decode('utf-8'),
+                "todo-items": []
             }
 
             json.dump(data, f, indent=4)
     except FileNotFoundError:
         return "json file not found"
 
-    return url_for("home")
+    return url_for("home", username=username)
 
 @app.route('/home/add-item', methods=['POST'])
 def add_item():
     if not request.is_json:
         abort(404)
 
+    username = request.json.get("username")
     todo_item = request.json.get("content")
-    print(todo_item)
+
+    try:
+        with open("data.json", "r") as f:
+            data = json.load(f)
+
+            new_data = {
+                "content": todo_item,
+                "status": "incomplete"
+            }
+        
+            data[username]["todo-items"].append(new_data)
+
+        with open("data.json", "w") as f:
+            json.dump(data, f, indent=4)
+
+    except FileNotFoundError:
+        return "json file not found"
+
     return url_for("home")
 
 @app.route('/home')
 def home():
-    return render_template("home.html")
+    username = request.args.get("username")
+    return render_template("home.html", username=username)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

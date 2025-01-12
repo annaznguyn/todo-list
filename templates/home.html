@@ -68,6 +68,8 @@
         </div>
 
         <script>
+            var username = "{{ username }}";
+
             // focus on the input space when clicking on it
             document.getElementById("plus-icon").addEventListener("click", function() {
                 document.getElementById("input-space").focus();
@@ -109,6 +111,7 @@
                 } else {
                     var addItemURL = "{{ url_for('add_item') }}";
                     var response = await axios.post(addItemURL, {
+                        username: username,
                         content: val
                     });
 

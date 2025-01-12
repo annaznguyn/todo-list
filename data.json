@@ -1,6 +1,12 @@
 {
     "as": {
-        "password": "$2b$12$bUnU1q3mJZxFfnXYwRQODu0fEdL3RoI6BuAgqmBJwYE4ngZr49HZK",
-        "salt": "$2b$12$bUnU1q3mJZxFfnXYwRQODu"
+        "password": "$2b$12$K9fY7GlP7BTjdLw0O5C7.uZ5mSuk3eEgNLxtku4dYtNuIUefUHYsW",
+        "salt": "$2b$12$K9fY7GlP7BTjdLw0O5C7.u",
+        "todo-items": [
+            {
+                "content": "Finish this feature",
+                "status": "incomplete"
+            }
+        ]
     }
 }
