@@ -78,6 +78,7 @@
                 align-self: flex-start;
                 margin-left: 100px;
                 margin-bottom: 30px;
+                font-weight: bold;
             }
 
             .todo-container {
@@ -94,7 +95,7 @@
                 z-index: -1;
             }
 
-            h2 {
+            h1 {
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             }
         </style>
@@ -103,7 +104,7 @@
     <body>
         <img src="../static/images/purple-sky.png">
         <div class="container">
-            <h2>To Do List</h2>
+            <h1>To Do List</h1>
             <div id="date"></div>
             <div class="todo-container">
                 <div id="todo-items"></div>
@@ -137,7 +138,7 @@
                     
                     var html = `
                     <div class="todo">
-                        <input class="todo-content" type="checkbox">${content}</input>
+                        <input id="todo-content" type="checkbox" onclick="checked()">${content}</input>
                     </div>`;
                     
                     todo_items_html.innerHTML += html;
