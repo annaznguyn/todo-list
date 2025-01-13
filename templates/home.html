@@ -9,6 +9,14 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
         <style>
+            body {
+                margin: 0;
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
             .add-container {
                 width: 195px;
             }
@@ -52,20 +60,62 @@
             #plus-icon {
                 cursor: pointer;
             }
+
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border: 1px solid transparent;
+                border-radius: 20px;
+                background-color: white;
+                width: 1100px;
+                height: 800px;
+                overflow-y: auto;
+            }
+
+            #date {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                align-self: flex-start;
+                margin-left: 100px;
+                margin-bottom: 30px;
+            }
+
+            .todo-container {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                align-self: flex-start;
+                margin-left: 100px;
+            }
+
+            img {
+                margin: 0;
+                height: 100vh;
+                width: 100vw;
+                position: absolute;
+                z-index: -1;
+            }
+
+            h2 {
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            }
         </style>
     </head>
 
     <body>
-        <div class="todo-container">
-            <div id="todo-items"></div>
-            <div class="add-container">
-                <div class="todo-input">
-                    <i id="plus-icon" class="fa fa-plus"></i>
-                    <input id="input-space" type="text" placeholder="Add a to-do item"><br>
-                </div>
-                <div class="todo-btn">
-                    <button id="add-btn" style="display: none;">Add</button>
-                    <button id="cancel-btn" style="display: none;">Cancel</button>
+        <img src="../static/images/purple-sky.png">
+        <div class="container">
+            <h2>To Do List</h2>
+            <div id="date"></div>
+            <div class="todo-container">
+                <div id="todo-items"></div>
+                <div class="add-container">
+                    <div class="todo-input">
+                        <i id="plus-icon" class="fa fa-plus"></i>
+                        <input id="input-space" type="text" placeholder="Add a to-do item"><br>
+                    </div>
+                    <div class="todo-btn">
+                        <button id="add-btn" style="display: none;">Add</button>
+                        <button id="cancel-btn" style="display: none;">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -87,7 +137,7 @@
                     
                     var html = `
                     <div class="todo">
-                        <input type="checkbox">${content}</input>
+                        <input class="todo-content" type="checkbox">${content}</input>
                     </div>`;
                     
                     todo_items_html.innerHTML += html;
@@ -95,6 +145,17 @@
             }
 
             displayTodoItems(todo_items);
+
+            // display date
+            var date = new Date();
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+            var formattedDate = days[date.getDay()] + ", " + date.getDate() + " " + months[date.getMonth()]
+            date_html = `
+                <p class="formatted-date">${formattedDate}</p>
+            `;
+            document.getElementById("date").innerHTML += date_html;
 
             // focus on the input space when clicking on it
             document.getElementById("plus-icon").addEventListener("click", function() {
