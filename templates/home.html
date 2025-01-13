@@ -9,18 +9,18 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
         <style>
-            .todo-item {
+            .add-container {
                 width: 195px;
             }
 
-            .todo-item input {
+            .todo-container input {
                 border: 1px solid transparent;
                 border-bottom: 1px solid black;
                 margin-bottom: 10px;
                 outline: none;
             }
 
-            .todo-item button {
+            .todo-container button {
                 border: none;
                 background: none;
                 float: right;
@@ -39,12 +39,12 @@
                 width: 60px;
             }
 
-            .todo-item button:hover {
+            .todo-container button:hover {
                 background: black;
                 color: white;
             }
 
-            .todo-item input:focus {
+            .todo-container input:focus {
                 border: 1px solid transparent;
                 border-bottom: 2px solid black;
             }
@@ -56,19 +56,45 @@
     </head>
 
     <body>
-        <div class="todo-item">
-            <div class="todo-input">
-                <i id="plus-icon" class="fa fa-plus"></i>
-                <input id="input-space" type="text" placeholder="Add a to-do item"><br>
-            </div>
-            <div class="todo-btn">
-                <button id="add-btn" style="display: none;">Add</button>
-                <button id="cancel-btn" style="display: none;">Cancel</button>
+        <div class="todo-container">
+            <div id="todo-items"></div>
+            <div class="add-container">
+                <div class="todo-input">
+                    <i id="plus-icon" class="fa fa-plus"></i>
+                    <input id="input-space" type="text" placeholder="Add a to-do item"><br>
+                </div>
+                <div class="todo-btn">
+                    <button id="add-btn" style="display: none;">Add</button>
+                    <button id="cancel-btn" style="display: none;">Cancel</button>
+                </div>
             </div>
         </div>
 
         <script>
             var username = "{{ username }}";
+            var todo_items = JSON.parse({{ todo_items|tojson|safe }});
+
+            var todo_items_html = document.getElementById("todo-items");
+
+            // display the todo items
+            function displayTodoItems(items) {
+                todo_items_html.innerHTML = "";
+
+                for (let key in items) {
+                    var item = todo_items[key]
+                    var content = item["content"]
+                    var status = item["status"]
+                    
+                    var html = `
+                    <div class="todo">
+                        <input type="checkbox">${content}</input>
+                    </div>`;
+                    
+                    todo_items_html.innerHTML += html;
+                }
+            }
+
+            displayTodoItems(todo_items);
 
             // focus on the input space when clicking on it
             document.getElementById("plus-icon").addEventListener("click", function() {
@@ -109,6 +135,14 @@
                 if (val === "") {
                     console.log("Input is empty");
                 } else {
+                    // display the todo items
+                    var newTodoItem = {
+                        content: val,
+                        status: "incomplete"
+                    };
+                    todo_items.push(newTodoItem);
+                    displayTodoItems(todo_items);
+
                     var addItemURL = "{{ url_for('add_item') }}";
                     var response = await axios.post(addItemURL, {
                         username: username,

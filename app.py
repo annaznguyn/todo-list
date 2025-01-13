@@ -104,7 +104,15 @@ def add_item():
 @app.route('/home')
 def home():
     username = request.args.get("username")
-    return render_template("home.html", username=username)
+
+    try:
+        with open("data.json", "r") as f:
+            data = json.load(f)
+            todo_items = data[username]["todo-items"]
+    except FileNotFoundError:
+        return "json file not found"
+
+    return render_template("home.html", username=username, todo_items=json.dumps(todo_items))
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
