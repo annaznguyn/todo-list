@@ -10,20 +10,113 @@
             #pwd-err, #username-err, #err {
                 color: red;
             }
+
+            body {
+                margin: 0;
+                height: 100vh;
+                width: 100vw;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            .container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                border: 1px solid transparent;
+                border-radius: 20px;
+                padding-top: 50px;
+                padding-bottom: 50px;
+                padding-left: 100px;
+                padding-right: 100px;
+                background: white;
+            }
+
+            .info-container {
+                margin-bottom: 30px;
+                font-size: 20px;
+            }
+
+            .info-container input {
+                border-radius: 10px;
+                padding: 7px;
+                height: 10px;
+                border: 1px solid black;
+                outline: none;
+            }
+
+            .info-container input:focus {
+                border: 2px solid rgb(47, 145, 47);
+            }
+
+            button {
+                height: 35px;
+                margin-left: 53px;
+                margin-right: 53px;
+                border: 1px solid transparent;
+                border-radius: 20px;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: rgb(47, 145, 47);
+                color: white;
+                font-weight: 700;
+            }
+
+            button:hover {
+                background: rgb(32, 99, 32);
+            }
+
+            h1 {
+                display: flex;
+                justify-content: center;
+                color: rgb(47, 145, 47);
+            }
+
+            img {
+                position: absolute;
+                z-index: -10;
+                margin: 0;
+                width: 100vw;
+                height: 100vh;
+            }
+
+            .login-footer {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+
+            .login-footer a {
+                color: rgb(32, 99, 32);
+                font-weight: 500;
+                text-decoration: none;
+            }
+
+            .login-footer a:hover {
+                text-decoration: underline;
+            }
         </style>
     </head>
 
     <body>
-        <h3>Log In</h3>
-        <p>Username</p>
-        <input id="username">
-        <p>Password</p>
-        <input id="password" type="password"><br>
-        <p id="pwd-err" style="display: none;">Password doesn't match</p>
-        <p id="username-err" style="display: none;">Username doesn't exist</p>
-        <p id="err" style="display: none;">Error logging in</p>
-        <button onclick="login()">Log In</button>
-        <p>No Account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
+        <img src="../static/images/leaves.png">
+        <div class="container">
+            <h1>Log In</h1>
+            <div class="info-container">
+                <p>Username</p>
+                <input id="username" placeholder="Abacus">
+                <p>Password</p>
+                <input id="password" type="password" placeholder="123"><br>
+            </div>
+            <p id="pwd-err" style="display: none;">Password doesn't match</p>
+            <p id="username-err" style="display: none;">Username doesn't exist</p>
+            <p id="err" style="display: none;">Error logging in</p>
+            <button onclick="login()">Log In</button>
+            <div class="login-footer">
+                <p>No Account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
+            </div>
+        </div>
     
         <script>
             // check if a URL is valid
