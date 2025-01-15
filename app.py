@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, url_for, abort
 from flask_socketio import SocketIO
-import pickle
 import json
 import bcrypt
 
